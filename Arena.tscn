@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Blob.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Arena.gd" type="Script" id=2]
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( -0.984711, -3.07741, 1159.34, 1.6934, 1155.1, 623.947, -3.14313, 622.533 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+outlines = [ PoolVector2Array( -0.984711, -3.07741, 1159.34, 1.6934, 1155.1, 623.947, -3.14313, 622.533 ) ]
+
+[node name="Arena" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Navigation2D" type="Navigation2D" parent="."]
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="Navigation2D"]
+navpoly = SubResource( 1 )
+
+[node name="YSort" type="YSort" parent="."]
+
+[node name="Blob" parent="YSort" instance=ExtResource( 1 )]
+position = Vector2( 1084.36, 81.0276 )
+
+[node name="Blob2" parent="YSort" instance=ExtResource( 1 )]
+position = Vector2( 1062.69, 339.561 )
+id = 2
+
+[node name="Blob3" parent="YSort" instance=ExtResource( 1 )]
+position = Vector2( 174.071, 247.896 )
+id = 3
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -221.0
+margin_right = -5.0
+margin_bottom = -5.0
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
