@@ -1,63 +1,55 @@
 extends RigidBody2D
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 export(int) var id = 1
+export(int, 80, 100, 4) var health_points:int = 97
 export(int, 30, 40) var linear_speed = 100
-export(int, 60, 90) var angular_speed = 720
-export(int, 10, 25) var sense_range = 20
-export(int, 60, 90) var sight_range = 70
-export(int, 12, 16) var weapon = 12
+export(int, 60, 90) var angular_speed = 60
 
-var health_points:int = 96
-var target_point:Vector2 = Vector2(400,200)
-var target_angle:float = deg2rad(180)
-
-var sense_enemies = {}
-var sight_enemies = {}
-
-var velocity:Vector2 = Vector2.ZERO
+export var max_look_time = 1.2
+export var max_move_time = 4
 
 signal killed(victim, killer)
 
+enum {LOOK, MOVE, ATTACK, DEAD}
+# FOLLOW
 
-enum {IDLE, LOOK, MOVE, ATTACK, DEAD}
-
-var underattack:bool = false
 var enemyaround:bool = false
 var enemyinsight:bool = false
 var enemykilled:bool = false
+var enemyinrange:bool = false
+var wallinsight:bool = false
 
-var state = IDLE
-# Called when the node enters the scene tree for the first time.
+var objectinsight = null
+var time_looking:float = 0
+var time_moving:float = 0
+var target_angle:float = 0
+var time_damage:float = 0
+var attackers:int = 0
+var dir:float = 1
+
+
+var state = LOOK
+
+var rng = RandomNumberGenerator.new()
 func _ready():
+	rng.randomize()
+	$Label.text = str(id)
+	$AnimationPlayer.play("attack")
 	pass
 
 func _process(delta):
 	pass
 
 func _physics_process(delta):
-	var action = get_next_step()
-	match(action):
-		IDLE:
-			applied_torque = 0
-			applied_force = Vector2.ZERO
+	state = get_next_step()
+	#$AnimationPlayer.stop()
+	match(state):
 		LOOK:
-			var diff = target_angle - get_angle_to(Vector2.ZERO)
-			if abs(diff) < deg2rad(5):
-				state = IDLE
-			elif diff > 0:
-				applied_torque = +angular_speed
-			else:
-				applied_torque = -angular_speed
+			time_looking += delta
+			rotation_degrees += dir * angular_speed * delta
 		MOVE:
-			if position.distance_to(target_point) < 2:
-				state = IDLE
-				linear_velocity = Vector2.ZERO
-			else:
-				print(position.distance_to(target_point))
-				linear_velocity = position.direction_to(target_point) * linear_speed
+			time_moving += delta
+			linear_velocity = linear_speed * Vector2(cos(rotation), sin(rotation))
 		ATTACK:
 			$AnimationPlayer.play("attack")
 		DEAD:
@@ -66,55 +58,83 @@ func _physics_process(delta):
 
 func get_stats():
 	var dict = {}
-	dict["sense"] = sense_enemies.keys()
-	dict["sight"] = sight_enemies.keys()
+	dict["id"] = id
 	dict["hp"] = health_points
-	dict["action"] = state
+	dict["ac"] = state
+	dict["es"] = enemyinsight
+	dict["er"] = enemyinrange
+	dict["ws"] = wallinsight
+	dict["ta"] = round(target_angle)
+	dict["tm"] = round(time_moving)
+	dict["tl"] = round(time_looking)
 	return dict
 
-func _on_Smell_body_entered(body):
-	if body.id != id:
-		print(id," senses ", body.id)
-		sense_enemies[body.id] = body
-		enemyaround = true
-	pass # Replace with function body.
+func get_next_step():
+	cast_rays()
 
-func _on_See_body_entered(body):
-	var angle_to = position.direction_to(body.position)
-	$See/RayCast2D.cast_to = angle_to * sight_range
-	if body == $See/RayCast2D.get_collider():
-		print(id," sees ", body.id)
-		sight_enemies[body.id] = body
-		enemyinsight = true
-	pass
-
-func get_next_step(): 
-	pass
-
-func _on_HurtBox_area_entered(area:Area2D):
-	if area.get_parent() == self:
-		return
-	if area.name == "Weapon":
-		underattack = true
-		health_points = health_points - 16
-	if health_points <= 0:
-		print(id, " is killed by ", area.get_parent().id)
-		emit_signal("killed",id, area.get_parent().id)
-		queue_free() 
-	pass # Replace with function body.
+	if enemyinrange:
+		return ATTACK
 	
-func _on_Smell_body_exited(body):
-	if body.id in sense_enemies:
-		print(id, sense_enemies.erase(body.id))
-	if sense_enemies.size() == 0:
-		enemyinsight = false
+	elif enemyinsight:
+		target_angle = rad2deg(get_angle_to(objectinsight.position))
+		if abs(target_angle) < 5:
+			return MOVE
+		elif target_angle < 0:
+			dir = -1
+			return LOOK
+		else:
+			dir = 1
+			return LOOK
+	
+	elif wallinsight:
+		return LOOK
+	
+	elif time_looking > max_look_time:
+		time_looking = 0
+		time_moving = 0
+		return MOVE
+	
+	elif time_moving > max_move_time:
+		dir = rng.randi_range(0.4,1) * [1,-1][randi() % 2]
+		time_looking = 0
+		time_moving = 0
+		return LOOK
+		
+	elif state == ATTACK:
+		return LOOK
+		
+	else:
+		return state
 
-func _on_See_body_exited(body):
-	if body.id in sight_enemies:
-		print(id, sight_enemies.erase(body.id))
 
-func _on_HurtBox_area_exited(area):
-	if area.get_parent() == self:
-		return
-	if area.name == "Weapon":
-		underattack = false
+func cast_rays():
+	enemyinsight = false
+	wallinsight = false
+	objectinsight = null
+	var iamblocked = false
+	
+	if $Center.is_colliding():
+		var body = $Center.get_collider()
+		if body is RigidBody2D:
+			enemyinsight = true
+			objectinsight = body
+		if body is StaticBody2D:
+			iamblocked = true
+	
+	if iamblocked:
+		if $Left.is_colliding():
+			var body = $Left.get_collider()
+			if body is StaticBody2D:
+				wallinsight = true
+				dir = 1 * rng.randi_range(0.4,1)
+			
+		elif $Right.is_colliding():
+			var body = $Right.get_collider()
+			if body is StaticBody2D:
+				wallinsight = true
+				dir = -1 * rng.randi_range(0.4,1)
+	
+	var areas = $HitBox.get_overlapping_areas()
+	for area in areas:
+		if area.name == "Weapon":
+			queue_free()
