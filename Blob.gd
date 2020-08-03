@@ -2,10 +2,10 @@ extends RigidBody2D
 
 export(int) var id = 1
 export(int, 80, 100, 4) var health_points:int = 97
-export(int, 30, 40) var linear_speed = 100
-export(int, 60, 90) var angular_speed = 60
+export(int, 30, 40) var linear_speed = 80
+export(int, 60, 90) var angular_speed = 120
 
-export var max_look_time = 1.2
+export var max_look_time = 0.8
 export var max_move_time = 4
 
 signal killed(victim, killer)
@@ -18,13 +18,13 @@ var enemyinsight:bool = false
 var enemykilled:bool = false
 var enemyinrange:bool = false
 var wallinsight:bool = false
+var underattack:bool = false
 
 var objectinsight = null
 var time_looking:float = 0
 var time_moving:float = 0
 var target_angle:float = 0
 var time_damage:float = 0
-var attackers:int = 0
 var dir:float = 1
 
 
@@ -34,7 +34,6 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	rng.randomize()
 	$Label.text = str(id)
-	$AnimationPlayer.play("attack")
 	pass
 
 func _process(delta):
@@ -86,7 +85,8 @@ func get_next_step():
 			dir = 1
 			return LOOK
 	
-	elif wallinsight:
+	if underattack:
+		dir = rng.randf_range(1,2)
 		return LOOK
 	
 	elif time_looking > max_look_time:
@@ -95,9 +95,12 @@ func get_next_step():
 		return MOVE
 	
 	elif time_moving > max_move_time:
-		dir = rng.randi_range(0.4,1) * [1,-1][randi() % 2]
+		dir = rng.randi_range(0.4,1) * [1,-1][rng.randi_range(-1,1)]
 		time_looking = 0
 		time_moving = 0
+		return LOOK
+	
+	elif wallinsight:
 		return LOOK
 		
 	elif state == ATTACK:
@@ -111,30 +114,50 @@ func cast_rays():
 	enemyinsight = false
 	wallinsight = false
 	objectinsight = null
+	underattack = false
+	
 	var iamblocked = false
 	
-	if $Center.is_colliding():
-		var body = $Center.get_collider()
+	if $Left.is_colliding():
+		var body = $Left.get_collider()
+		if body is StaticBody2D:
+			wallinsight = true
+			dir = 1 
+			
+	elif $Right.is_colliding():
+		var body = $Right.get_collider()
+		if body is StaticBody2D:
+			wallinsight = true
+			dir = -1 
+	
+	if $RCenter.is_colliding():
+		var body = $RCenter.get_collider()
 		if body is RigidBody2D:
 			enemyinsight = true
 			objectinsight = body
 		if body is StaticBody2D:
-			iamblocked = true
+			pass
+			#wallinsight = true
 	
-	if iamblocked:
-		if $Left.is_colliding():
-			var body = $Left.get_collider()
-			if body is StaticBody2D:
-				wallinsight = true
-				dir = 1 * rng.randi_range(0.4,1)
+	if $LCenter.is_colliding():
+		var body = $LCenter.get_collider()
+		if body is RigidBody2D:
+			enemyinsight = true
+			objectinsight = body
+		if body is StaticBody2D:
+			pass
+			#wallinsight = true
 			
-		elif $Right.is_colliding():
-			var body = $Right.get_collider()
-			if body is StaticBody2D:
-				wallinsight = true
-				dir = -1 * rng.randi_range(0.4,1)
-	
 	var areas = $HitBox.get_overlapping_areas()
 	for area in areas:
 		if area.name == "Weapon":
-			queue_free()
+			health_points -= 1
+			if health_points < 0:
+				queue_free()
+			break
+
+	var bodies = $Area2D.get_overlapping_bodies()
+	for body in bodies:
+		if body != self:
+			underattack = true
+	

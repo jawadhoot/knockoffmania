@@ -10,8 +10,9 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	rng.randomize()
 	var Blob = load("res://Blob.tscn")
-	for i in range(20):
+	for i in range(8):
 		var blob:RigidBody2D = Blob.instance()
+		blob.scale = Vector2(0.8,0.8)
 		blob.id = i
 		blob.position = Vector2(rng.randi_range(40,1220),rng.randi_range(40,640))
 		blob.rotation_degrees = rng.randi_range(-180,180)
