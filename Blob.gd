@@ -3,10 +3,10 @@ extends RigidBody2D
 export(int) var id = 1
 export(int, 80, 100, 4) var health_points:int = 97
 export(int, 30, 40) var linear_speed = 80
-export(int, 60, 90) var angular_speed = 120
+export(int, 60, 90) var angular_speed = 90
 
-export var max_look_time = 0.8
-export var max_move_time = 4
+export var max_look_time = 1
+export var max_move_time = 3
 
 signal killed(victim, killer)
 
@@ -92,7 +92,7 @@ func get_next_step():
 			return LOOK
 	
 	if underattack:
-		dir = rng.randf_range(1,2)
+		dir = dir * rng.randf_range(1,2)
 		return LOOK
 	
 	elif time_looking > max_look_time:
@@ -101,12 +101,14 @@ func get_next_step():
 		return MOVE
 	
 	elif time_moving > max_move_time:
-		dir = rng.randi_range(0.4,1) * [1,-1][rng.randi_range(-1,1)]
+		dir = rng.randf_range(0.4,1) * [1,-1][rng.randi() % 2]
+		print(dir)
 		time_looking = 0
 		time_moving = 0
 		return LOOK
 	
 	elif wallinsight:
+		dir = dir * rng.randf_range(0.4,1)
 		return LOOK
 		
 	elif state == ATTACK:
@@ -160,12 +162,12 @@ func cast_rays():
 				queue_free()
 			break
 
-	var bodies = $Area2D.get_overlapping_bodies()
+	var bodies = $Sense.get_overlapping_bodies()
 	for body in bodies:
 		if body != self:
 			if 0 > position.angle_to_point(body.position):
-				dir = -1
-			else:
 				dir = 1
+			else:
+				dir = -1
 			underattack = true
 	

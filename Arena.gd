@@ -10,7 +10,7 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	rng.randomize()
 	var Blob = load("res://Blob.tscn")
-	for i in range(8):
+	for i in range(20):
 		var blob:RigidBody2D = Blob.instance()
 		blob.scale = Vector2(0.8,0.8)
 		blob.id = i
