@@ -34,7 +34,6 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	$Sprite.frame = id
 	rng.randomize()
-	$Label.text = str(id)
 	pass
 
 func _process(delta):
