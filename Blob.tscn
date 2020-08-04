@@ -9,13 +9,13 @@ friction = 0.0
 [sub_resource type="CircleShape2D" id=2]
 radius = 16.0
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 4, 10 )
 
-[sub_resource type="CircleShape2D" id=6]
+[sub_resource type="CircleShape2D" id=4]
 radius = 16.0
 
-[sub_resource type="CircleShape2D" id=7]
+[sub_resource type="CircleShape2D" id=5]
 radius = 32.0
 
 [node name="Blob" type="RigidBody2D"]
@@ -63,13 +63,13 @@ collision_mask = 3
 position = Vector2( 22, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon"]
-shape = SubResource( 5 )
+shape = SubResource( 3 )
 
 [node name="HitBox" type="Area2D" parent="."]
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-shape = SubResource( 6 )
+shape = SubResource( 4 )
 
 [node name="Label" type="Label" parent="."]
 margin_right = 40.0
@@ -84,4 +84,4 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 4, 0 )
-shape = SubResource( 7 )
+shape = SubResource( 5 )

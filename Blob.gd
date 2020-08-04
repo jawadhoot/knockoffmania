@@ -43,6 +43,9 @@ func _physics_process(delta):
 	state = get_next_step()
 	#$AnimationPlayer.stop()
 	match(state):
+		DEAD:
+			pass
+		
 		LOOK:
 			time_looking += delta
 			rotation_degrees += dir * angular_speed * delta
@@ -70,6 +73,9 @@ func get_stats():
 
 func get_next_step():
 	cast_rays()
+	
+	if state == DEAD:
+		return DEAD
 
 	if enemyinrange:
 		return ATTACK
@@ -116,8 +122,6 @@ func cast_rays():
 	objectinsight = null
 	underattack = false
 	
-	var iamblocked = false
-	
 	if $Left.is_colliding():
 		var body = $Left.get_collider()
 		if body is StaticBody2D:
@@ -159,5 +163,9 @@ func cast_rays():
 	var bodies = $Area2D.get_overlapping_bodies()
 	for body in bodies:
 		if body != self:
+			if 0 > position.angle_to_point(body.position):
+				dir = -1
+			else:
+				dir = 1
 			underattack = true
 	
