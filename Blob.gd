@@ -33,6 +33,7 @@ var state = LOOK
 var rng = RandomNumberGenerator.new()
 func _ready():
 	$Sprite.frame = id
+	$Label.text = str(id)
 	rng.randomize()
 	pass
 

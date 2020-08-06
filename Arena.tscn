@@ -1,10 +1,24 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Block.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Arena.gd" type="Script" id=2]
 [ext_resource path="res://assets/grass.png" type="Texture" id=3]
+[ext_resource path="res://assets/nums.png" type="Texture" id=4]
+[ext_resource path="res://assets/Kenney Bold.ttf" type="DynamicFontData" id=5]
 
-[sub_resource type="TileSet" id=1]
+[sub_resource type="DynamicFont" id=7]
+size = 48
+outline_size = 2
+outline_color = Color( 0.352941, 0.368627, 0.458824, 1 )
+extra_spacing_top = 100
+font_data = ExtResource( 5 )
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 111, 66 )
+
+[sub_resource type="TileSet" id=2]
 0/name = "grass.png 0"
 0/texture = ExtResource( 3 )
 0/tex_offset = Vector2( 0, 0 )
@@ -29,11 +43,79 @@
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 600, 10 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 10, 300 )
+
+[sub_resource type="Animation" id=6]
+resource_name = "Finish"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("CanvasLayer/Label:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.6 ),
+"transitions": PoolRealArray( 1, 0.5 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CanvasLayer/Label:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2, 2.4, 2.8, 3.2, 3.6, 4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, false, true, false, true ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "ready"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("CanvasLayer/Intro:texture:region")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 111, 66 ), Rect2( 111, 0, 111, 66 ), Rect2( 222, 0, 111, 66 ), Rect2( 333, 0, 111, 66 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CanvasLayer/Intro:rect_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.8, 1, 1.8, 2, 2.8, 3, 3.8 ),
+"transitions": PoolRealArray( 0.5, 0.5, 1, 0.5, 0.5, 0.5, 1, 0.5 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 1, 1 ), Vector2( 2, 2 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CanvasLayer/Intro:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.8, 1, 1.8, 2, 2.8, 3, 3.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, false, true, false, true, false ]
+}
 
 [node name="Arena" type="Node2D"]
 pause_mode = 2
@@ -42,44 +124,71 @@ script = ExtResource( 2 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Label" type="Label" parent="CanvasLayer"]
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -221.0
-margin_right = -5.0
-margin_bottom = -5.0
-autowrap = true
+visible = false
+margin_left = 232.0
+margin_right = 1054.0
+margin_bottom = 172.0
+custom_fonts/font = SubResource( 7 )
+text = "We Have A Winner !!!"
+align = 1
+valign = 1
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Intro" type="TextureRect" parent="CanvasLayer"]
+visible = false
+margin_left = 584.0
+margin_top = 288.0
+margin_right = 695.0
+margin_bottom = 354.0
+texture = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Outro" type="TextureRect" parent="CanvasLayer"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 1 )
+tile_set = SubResource( 2 )
 format = 1
 tile_data = PoolIntArray( 0, 0, 0, 1, 0, 1, 2, 0, 1, 3, 0, 1, 4, 0, 1, 5, 0, 1, 6, 0, 1, 7, 0, 1, 8, 0, 1, 9, 0, 1, 10, 0, 1, 11, 0, 1, 12, 0, 1, 13, 0, 1, 14, 0, 1, 15, 0, 1, 16, 0, 1, 17, 0, 1, 18, 0, 1, 19, 0, 2, 65536, 0, 65536, 65537, 0, 65537, 65538, 0, 65537, 65539, 0, 65537, 65540, 0, 65537, 65541, 0, 65537, 65542, 0, 65537, 65543, 0, 65537, 65544, 0, 65537, 65545, 0, 65537, 65546, 0, 65537, 65547, 0, 65537, 65548, 0, 65537, 65549, 0, 65537, 65550, 0, 65537, 65551, 0, 65537, 65552, 0, 65537, 65553, 0, 65537, 65554, 0, 65537, 65555, 0, 65538, 131072, 0, 65536, 131073, -1610612736, 65537, 131074, -1610612736, 65537, 131075, -1610612736, 65537, 131076, -1610612736, 65537, 131077, -1610612736, 65537, 131078, -1610612736, 65537, 131079, -1610612736, 65537, 131080, -1610612736, 65537, 131081, -1610612736, 65537, 131082, -1610612736, 65537, 131083, -1610612736, 65537, 131084, -1610612736, 65537, 131085, -1610612736, 65537, 131086, -1610612736, 65537, 131087, -1610612736, 65537, 131088, -1610612736, 65537, 131089, -1610612736, 65537, 131090, -1610612736, 65537, 131091, 0, 65538, 196608, 0, 65536, 196609, -1610612736, 65537, 196610, -1610612736, 65537, 196611, -1610612736, 65537, 196612, -1610612736, 65537, 196613, -1610612736, 65537, 196614, -1610612736, 65537, 196615, -1610612736, 65537, 196616, -1610612736, 65537, 196617, -1610612736, 65537, 196618, -1610612736, 65537, 196619, -1610612736, 65537, 196620, -1610612736, 65537, 196621, -1610612736, 65537, 196622, -1610612736, 65537, 196623, 0, 65537, 196624, 0, 65537, 196625, -1610612736, 65537, 196626, -1610612736, 65537, 196627, 0, 65538, 262144, 0, 65536, 262145, -1610612736, 65537, 262146, -1610612736, 65537, 262147, -1610612736, 65537, 262148, -1610612736, 65537, 262149, -1610612736, 65537, 262150, -1610612736, 65537, 262151, -1610612736, 65537, 262152, -1610612736, 65537, 262153, -1610612736, 65537, 262154, -1610612736, 65537, 262155, -1610612736, 65537, 262156, -1610612736, 65537, 262157, 0, 65537, 262158, 0, 65537, 262159, -1610612736, 65537, 262160, 0, 65537, 262161, -1610612736, 65537, 262162, -1610612736, 65537, 262163, 0, 65538, 327680, 0, 65536, 327681, -1610612736, 65537, 327682, -1610612736, 65537, 327683, -1610612736, 65537, 327684, -1610612736, 65537, 327685, -1610612736, 65537, 327686, -1610612736, 65537, 327687, -1610612736, 65537, 327688, -1610612736, 65537, 327689, -1610612736, 65537, 327690, -1610612736, 65537, 327691, -1610612736, 65537, 327692, -1610612736, 65537, 327693, -1610612736, 65537, 327694, -1610612736, 65537, 327695, -1610612736, 65537, 327696, 0, 65537, 327697, 0, 65537, 327698, 0, 65537, 327699, 0, 65538, 393216, 0, 65536, 393217, -1610612736, 65537, 393218, -1610612736, 65537, 393219, -1610612736, 65537, 393220, -1610612736, 65537, 393221, -1610612736, 65537, 393222, -1610612736, 65537, 393223, -1610612736, 65537, 393224, -1610612736, 65537, 393225, -1610612736, 65537, 393226, -1610612736, 65537, 393227, -1610612736, 65537, 393228, -1610612736, 65537, 393229, -1610612736, 65537, 393230, -1610612736, 65537, 393231, -1610612736, 65537, 393232, -1610612736, 65537, 393233, 0, 65537, 393234, 0, 65537, 393235, 0, 65538, 458752, 0, 65536, 458753, -1610612736, 65537, 458754, 0, 65537, 458755, -1610612736, 65537, 458756, -1610612736, 65537, 458757, -1610612736, 65537, 458758, -1610612736, 65537, 458759, -1610612736, 65537, 458760, -1610612736, 65537, 458761, -1610612736, 65537, 458762, -1610612736, 65537, 458763, -1610612736, 65537, 458764, -1610612736, 65537, 458765, 0, 65537, 458766, -1610612736, 65537, 458767, -1610612736, 65537, 458768, -1610612736, 65537, 458769, 0, 65537, 458770, 0, 65537, 458771, 0, 65538, 524288, 0, 65536, 524289, -1610612736, 65537, 524290, 0, 65537, 524291, 0, 65537, 524292, -1610612736, 65537, 524293, -1610612736, 65537, 524294, -1610612736, 65537, 524295, -1610612736, 65537, 524296, -1610612736, 65537, 524297, -1610612736, 65537, 524298, -1610612736, 65537, 524299, -1610612736, 65537, 524300, -1610612736, 65537, 524301, -1610612736, 65537, 524302, -1610612736, 65537, 524303, -1610612736, 65537, 524304, -1610612736, 65537, 524305, -1610612736, 65537, 524306, 0, 65537, 524307, 0, 65538, 589824, 0, 65536, 589825, -1610612736, 65537, 589826, 0, 65537, 589827, 0, 65537, 589828, 0, 65537, 589829, -1610612736, 65537, 589830, -1610612736, 65537, 589831, -1610612736, 65537, 589832, -1610612736, 65537, 589833, -1610612736, 65537, 589834, -1610612736, 65537, 589835, -1610612736, 65537, 589836, 0, 65537, 589837, 0, 65537, 589838, 0, 65537, 589839, -1610612736, 65537, 589840, -1610612736, 65537, 589841, 0, 65537, 589842, 0, 65537, 589843, 0, 65538, 655360, 0, 131072, 655361, 0, 131073, 655362, 0, 131073, 655363, 0, 131073, 655364, 0, 131073, 655365, 0, 131073, 655366, 0, 131073, 655367, 0, 131073, 655368, 0, 131073, 655369, 0, 131073, 655370, 0, 131073, 655371, 0, 131073, 655372, 0, 131073, 655373, 0, 131073, 655374, 0, 131073, 655375, 0, 131073, 655376, 0, 131073, 655377, 0, 131073, 655378, 0, 131073, 655379, 0, 131074 )
 
 [node name="Block" parent="." instance=ExtResource( 1 )]
-position = Vector2( 512, 160 )
+position = Vector2( 72, 128 )
 rotation = -1.57079
 
 [node name="Block2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 296, 480 )
+position = Vector2( 616, 104 )
 rotation = -5.49778
 
 [node name="Block3" parent="." instance=ExtResource( 1 )]
-position = Vector2( 712, 464 )
+position = Vector2( 1048, 488 )
 rotation = -2.09439
 
 [node name="Block4" parent="." instance=ExtResource( 1 )]
-position = Vector2( 952, 200 )
+position = Vector2( 648, 528 )
 rotation = -2.09439
 
 [node name="Block5" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1080, 432 )
+position = Vector2( 176, 424 )
 rotation = 0.261799
 
 [node name="Block6" parent="." instance=ExtResource( 1 )]
-position = Vector2( 176, 224 )
+position = Vector2( 960, 72 )
 rotation = -3.14159
 
 [node name="YSort" type="YSort" parent="."]
@@ -90,22 +199,26 @@ rotation = -3.14159
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2( 640, 32 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
 position = Vector2( 632, 656 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
 position = Vector2( 32, 344 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="StaticBody2D4" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
 position = Vector2( 1240, 344 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Finish = SubResource( 6 )
+anims/ready = SubResource( 5 )
