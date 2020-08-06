@@ -5,16 +5,17 @@ extends Node2D
 # var a = 2
 # var b = "text"
 
-var rng = RandomNumberGenerator.new()
 # Called when the node enters the scene tree for the first time.
+var rng = RandomNumberGenerator.new()
 func _ready():
 	rng.randomize()
+	
 	var Blob = load("res://Blob.tscn")
-	for i in range(20):
+	for i in range(Global.grid.size()):
 		var blob:RigidBody2D = Blob.instance()
-		#blob.scale = Vector2(0.8,0.8)
 		blob.id = i
-		blob.position = Vector2(rng.randi_range(40,1220),rng.randi_range(40,640))
+		var grid = Global.grid[i]
+		blob.position = Vector2(rng.randi_range(grid[0],grid[1]),rng.randi_range(grid[2],grid[3]))
 		blob.rotation_degrees = rng.randi_range(-180,180)
 		$YSort/Blobs.add_child(blob)
 	get_tree().paused = true
