@@ -1,15 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/button_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://assets/bold_font24.tres" type="DynamicFont" id=2]
+[ext_resource path="res://results.gd" type="Script" id=3]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ItemList" type="ItemList" parent="."]
+margin_top = 53.0
 margin_right = 1280.0
 margin_bottom = 632.0
 __meta__ = {
@@ -36,3 +40,26 @@ text = "Next Round"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_right = 640.0
+margin_bottom = 58.0
+custom_fonts/font = ExtResource( 2 )
+align = 1
+max_length = 6
+placeholder_text = "BET ID"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Search" type="Button" parent="."]
+margin_left = 640.0
+margin_right = 1280.0
+margin_bottom = 53.0
+custom_fonts/font = ExtResource( 1 )
+text = "Search"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="NextRound" to="." method="_on_NextRound_pressed"]

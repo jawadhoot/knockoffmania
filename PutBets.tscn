@@ -81,10 +81,10 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_right = 666.0
+margin_right = 536.0
 margin_bottom = 88.0
 custom_fonts/font = ExtResource( 3 )
-text = "Driver List"
+text = "Car  List"
 align = 1
 valign = 1
 __meta__ = {
@@ -92,7 +92,7 @@ __meta__ = {
 }
 
 [node name="Label2" type="Label" parent="."]
-margin_left = 666.0
+margin_left = 790.0
 margin_right = 1280.0
 margin_bottom = 88.0
 custom_fonts/font = ExtResource( 3 )
@@ -102,6 +102,44 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Info" type="Button" parent="."]
+margin_left = 536.0
+margin_right = 790.0
+margin_bottom = 88.0
+custom_fonts/font = ExtResource( 3 )
+text = "INFO"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+margin_left = 62.0
+margin_top = 136.0
+margin_right = 1228.0
+margin_bottom = 676.0
+dialog_text = "The Game:
+In KnockOffMania each car tries to eliminate other car by dashing in to one another as game progresses cars gets eliminated until 1 car remains.
+
+The Result:
+Podium is decided by last three cars remaining
+
+The Bets:
+You Place bets by selecting 3 drivers out of 20. who you think will be on the podium. if any of your selected driver gets on the podium you are a winner:
+
+The Payout:
+1 driver on the podium : 1
+2 drivers on the podium : 3
+All 3 drivers on the podium : 100
+All 3 drivers on the podium in the order selected: 500
+
+Driver List:
+Drivers in the Arena
+
+Placed Bets:
+Name of the punter (person placing bets, bet id, the placed bet (selected driver in the order) "
 [connection signal="item_selected" from="DriverList" to="." method="_on_DriverList_item_selected"]
 [connection signal="nothing_selected" from="DriverList" to="." method="_on_DriverList_nothing_selected"]
 [connection signal="pressed" from="AddBet" to="." method="_on_AddBet_pressed"]
+[connection signal="pressed" from="Begin" to="." method="_on_Begin_pressed"]
+[connection signal="pressed" from="Info" to="." method="_on_Info_pressed"]

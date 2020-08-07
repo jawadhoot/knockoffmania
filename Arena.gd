@@ -31,7 +31,7 @@ func _process(delta):
 		get_tree().paused = true
 		$AnimationPlayer.play("Finish")
 		yield($AnimationPlayer,"animation_finished")
-		get_tree().quit()
+		get_tree().change_scene("res://results.tscn")
 #	var text:PoolStringArray = []
 #	for blob in $YSort/Blobs.get_children():
 #		text.append(blob.get_stats())

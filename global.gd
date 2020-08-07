@@ -32,7 +32,8 @@ var bets = {}
 var result = []
 #var rng = RandomNumberGenerator.new()
 func _ready():
-	init()
+	pass
+	#init()
 
 enum {INIT,BET,DRAW,END}
 
