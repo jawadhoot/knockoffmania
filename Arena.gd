@@ -13,7 +13,8 @@ func _ready():
 	var Blob = load("res://Blob.tscn")
 	for i in range(Global.grid.size()):
 		var blob:RigidBody2D = Blob.instance()
-		blob.id = i
+		blob.id = Global.ids[i]
+		blob.label = Global.names[blob.id]
 		var grid = Global.grid[i]
 		blob.position = Vector2(rng.randi_range(grid[0],grid[1]),rng.randi_range(grid[2],grid[3]))
 		blob.rotation_degrees = rng.randi_range(-180,180)

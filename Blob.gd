@@ -1,7 +1,9 @@
 extends RigidBody2D
 
 export(int) var id = 1
-export(int, 80, 100, 4) var health_points:int = 97
+export(String) var label = "Diver"
+
+export(int, 80, 100, 4) var health_points:int = 8
 export(int, 30, 40) var linear_speed = 80
 export(int, 60, 90) var angular_speed = 90
 
@@ -33,6 +35,8 @@ var state = LOOK
 var rng = RandomNumberGenerator.new()
 func _ready():
 	$Sprite.frame = id
+	$CanvasLayer/Label.text = label
+	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
 	rng.randomize()
 	pass
 
@@ -41,11 +45,9 @@ func _process(delta):
 
 func _physics_process(delta):
 	state = get_next_step()
+	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
 	#$AnimationPlayer.stop()
 	match(state):
-		DEAD:
-			pass
-		
 		LOOK:
 			time_looking += delta
 			rotation_degrees += dir * angular_speed * delta
@@ -55,7 +57,7 @@ func _physics_process(delta):
 		ATTACK:
 			$AnimationPlayer.play("attack")
 		DEAD:
-			set_process(false)
+			pass
 	pass
 
 func get_stats():
@@ -72,11 +74,9 @@ func get_stats():
 	return dict
 
 func get_next_step():
-	cast_rays()
-	
 	if state == DEAD:
 		return DEAD
-
+	cast_rays()
 	if enemyinrange:
 		return ATTACK
 	
@@ -154,14 +154,6 @@ func cast_rays():
 			pass
 			#wallinsight = true
 			
-	var areas = $HitBox.get_overlapping_areas()
-	for area in areas:
-		if area.name == "Weapon":
-			health_points -= 1
-			if health_points < 0:
-				queue_free()
-			break
-
 	var bodies = $Sense.get_overlapping_bodies()
 	for body in bodies:
 		if body != self:
@@ -171,3 +163,13 @@ func cast_rays():
 				dir = -1
 			underattack = true
 	
+
+func _on_Timer_timeout():
+	var areas = $HitBox.get_overlapping_areas()
+	for area in areas:
+		if area.name == "Weapon":
+			$AnimationPlayer.play("hurt")
+			health_points -= 1
+			if health_points <= 1:
+				queue_free()
+			break
