@@ -38,6 +38,7 @@ var podium = []
 var podium_string = ""
 #var rng = RandomNumberGenerator.new()
 func _ready():
+	randomize()
 	pass
 	#init()
 
@@ -50,7 +51,7 @@ func set_podium():
 		var a = result.pop_back()
 		if not a in podium:
 			podium.append(a)
-	podium_string = "1 "+ names[podium[0]] + " 3 "+ names[podium[1]] + " 3 "+ names[podium[2]]
+	podium_string = "1 "+ names[podium[0]] + " 2 "+ names[podium[1]] + " 3 "+ names[podium[2]]
 
 func init():
 	randomize()
@@ -64,11 +65,13 @@ func init():
 			grid.append(grid_arr)
 			
 	print(ids.slice(0,grid.size()))
-	
+
+func clean_up():
 	result = []
 	podium_string = ""
 	podium = []
 	bets = {}
+	grid = []
 
 func add_bet(name, bet, bet_string) -> String:
 	var id = get_id()
@@ -85,8 +88,8 @@ func add_bet(name, bet, bet_string) -> String:
 
 func get_status(podium:Array,bet:Array):
 	var match_count3 = get_match(podium,bet)
-	var match_count2 = get_match(podium.slice(0,2),bet)
-	var match_count1 = get_match(podium.slice(0,1),bet)
+	var match_count2 = get_match(podium.slice(0,1),bet)
+	var match_count1 = get_match(podium.slice(0,0),bet)
 	if match_count3 == 3:
 		if podium == bet:
 			return "ALL_ON_PODIUM_IN_ORDER"

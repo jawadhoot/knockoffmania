@@ -9,7 +9,12 @@ var current_selected = []
 var SmallLabel = load("res://SmallLabel.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Global.init()
+	if Global.bets:
+		for id in Global.bets:
+			var bet = Global.bets[id]
+			$BetList.add_item(Global.bet_entry_string(bet))
+	else:
+		Global.init()
 	for i in range(Global.grid.size()):
 		var index = Global.ids[i]
 		$DriverList.add_item(Global.names[index])
@@ -46,7 +51,7 @@ func _on_DriverList_nothing_selected():
 	pass # Replace with function body.
 
 func _on_Info_pressed():
-	$AcceptDialog.show()
+	get_tree().change_scene("res://info.tscn")
 
 func _on_Begin_pressed():
 	get_tree().change_scene("res://Arena.tscn")

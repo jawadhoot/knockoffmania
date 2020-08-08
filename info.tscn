@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://info.gd" type="Script" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -500.0
+margin_top = -360.0
+margin_right = 500.0
+margin_bottom = 360.0
+text = "knockoffmania
+
+Game Developed for #colotterygamejam using Godot engine. It is a Betting Monitor Game, where players put bets on the outcome of game, and plays by itself.
+
+In This game there are 20 cars in an arena, each car tries to hit and eliminate other cars. The final 3 cars are on podium in the order of there eliminaton, the last car is on the first place on podium, the last car eliminate is on the second place of podium, and the second last car to be eliminated is on the third place of the podium
+
+Players put bets by picking the cars they think will be on the podium, order of the pick is right gives higher payout.
+
+source code: (https://github.com/jawadhoot/knockoffmania)
+Payout:
+
+ALL_ON_PODIUM_IN_ORDER pays 100:
+
+all 3 of the cars in the bet are on podium and the podium is in order of the pick, eg : your bet is (A,B,C) and podium is (A,B,C)
+
+ALL_ON_PODIUM pays 20:
+
+all 3 of the cars in the bet are on podium, eg : your bet is (A,C,B) and podium is (A,B,C)
+
+TOP_2_ON_SPOT pays 10:
+
+2 of the cars in the bet are on podium and are 1,2 in the order, eg : your bet is (A,B,D) and podium is (A,B,C) Note : your bet is (D,A,B) and podium is (A,B,C) does not qualify for this
+
+PICKED_TOP_2 pays 5:
+
+2 of the cars in the bet are on podium and are in Top 2 position, eg : your bet is (B,A,D) and podium is (A,B,C)
+
+2_ON_PODIUM pays 3:
+
+2 of the cars in the bet are on podium, eg : your bet is (D,A,B) and podium is (A,B,C)
+
+PICKED_THE_WINNER pays 2:
+
+1 of the car in the bet is on podium and is in first place, eg : your bet is (D,E,A) and podium is (A,B,C)
+
+1_ON_PODIUM pays 1:
+
+1 of the car in the bet is on podium, eg : your bet is (D,E,B) and podium is (A,B,C)
+
+SORRY pays 0:
+
+None of the car in the bet are on podium, eg : your bet is (D,E,F) and podium is (A,B,C)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 1128.0
+margin_right = 1280.0
+margin_bottom = 73.0
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

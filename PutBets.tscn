@@ -113,12 +113,6 @@ text = "INFO"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="AcceptDialog" type="AcceptDialog" parent="."]
-margin_left = 62.0
-margin_top = 136.0
-margin_right = 1228.0
-margin_bottom = 676.0
 [connection signal="item_selected" from="DriverList" to="." method="_on_DriverList_item_selected"]
 [connection signal="nothing_selected" from="DriverList" to="." method="_on_DriverList_nothing_selected"]
 [connection signal="pressed" from="AddBet" to="." method="_on_AddBet_pressed"]

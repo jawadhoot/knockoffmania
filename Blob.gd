@@ -104,6 +104,7 @@ func hurt():
 	health_points -= 1
 	if health_points < 0:
 		emit_signal("dead",id)
+		print(id," ",label," eliminated")
 		queue_free()
 	if not $AnimationPlayer.is_playing():
 		$AnimationPlayer.play("hurt")

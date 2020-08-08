@@ -18,4 +18,5 @@ func _on_Quit_pressed():
 	get_tree().quit()
 
 func _on_NextRound_pressed():
+	Global.clean_up()
 	get_tree().change_scene("res://putbets.tscn")
