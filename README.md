@@ -1,11 +1,13 @@
 # knockoffmania
 
-Game Developed for #colotterygamejam.
+Game Developed for #colotterygamejam using [Godot engine](https://godotengine.org/).
 It is a Betting Monitor Game, where players put bets on the outcome of game, and plays by itself.
 
 In This game there are 20 cars in an arena, each car tries to hit and eliminate other cars. The final 3 cars are on podium in the order of there eliminaton, the last car is on the first place on podium, the last car eliminate is on the second place of podium, and the second last car to be eliminated is on the third place of the podium
 
 Players put bets by picking the cars they think will be on the podium, order of the pick is right gives higher payout.
+
+source code: (https://github.com/jawadhoot/knockoffmania)
 
 ## Payout:
 
