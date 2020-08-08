@@ -21,9 +21,9 @@ func _on_AddBet_pressed():
 	if current_selected.size() == 0:
 		return
 	
-	var id = Global.add_bet($LineEdit.text, current_selected)
-	var text = $LineEdit.text + " - " + id + " - " + $SelectedList.text 
-	$BetList.add_item(text)
+	var bet = Global.add_bet($LineEdit.text, current_selected, $SelectedList.text )
+	print(bet)
+	$BetList.add_item(Global.bet_entry_string(bet))
 	current_selected = []
 	$SelectedList.text = ""
 	$LineEdit.text = ""
@@ -35,7 +35,6 @@ func _on_DriverList_item_selected(index):
 		return
 	current_selected.append(id)
 	var text = ""
-	print(current_selected)
 	for i in range(current_selected.size()):
 		text += str(i + 1) + "  " + Global.names[current_selected[i]] + "   "
 	$SelectedList.text = text

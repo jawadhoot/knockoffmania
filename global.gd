@@ -8,7 +8,7 @@ var x = 1280
 var y = 720
 var grid_x:int = 5
 var grid_y:int = 4
-var grid = []
+
 
 var names = [
 	"PaceMan", "Rudd3r", "Prick", "MaXie", "STALL", 
@@ -25,11 +25,14 @@ var payout = {
 	"PODIUM3" : 100,
 	"PODIUM2" : 3,
 	"PODIUM1" : 1,
-	"KAPUT" : 0
+	"-SORRY-" : 0
 }
 
+var grid = []
 var bets = {}
 var result = []
+var podium = []
+var podium_string = ""
 #var rng = RandomNumberGenerator.new()
 func _ready():
 	pass
@@ -37,35 +40,47 @@ func _ready():
 
 enum {INIT,BET,DRAW,END}
 
+func set_podium():
+	podium_string = ""
+	podium = []
+	while podium.size() < 3:
+		var a = result.pop_back()
+		if not a in podium:
+			podium.append(a)
+	podium_string = "1 "+ names[podium[0]] + " 3 "+ names[podium[1]] + " 3 "+ names[podium[2]]
+
 func init():
 	randomize()
 	ids.shuffle()
 	var w = x/grid_x
 	var h = y/grid_y
-	
+	grid = []
 	for j in range(grid_y):	
 		for i in range(grid_x):
 			var grid_arr = [i * w + 100, w * i + w - 100, j * h + 80, j * h + h  - 80]
 			grid.append(grid_arr)
 			
 	print(ids.slice(0,grid.size()))
+	
 	result = []
+	podium_string = ""
+	podium = []
 	bets = {}
 
-func add_bet(name, bet) -> String:
+func add_bet(name, bet, bet_string) -> String:
 	var id = get_id()
 	while id in bet:
 		id = get_id()
 	var ne_bet = {
 		"id": id,
 		"name": name,
-		"bet" : bet
+		"bet" : bet,
+		"bet_string" : bet_string
 	}
 	bets[id] = ne_bet
-	return id
+	return ne_bet
 
-func get_status(result:Array,bet:Array):
-	var podium = result.slice(0,3)
+func get_status(podium:Array,bet:Array):
 	var match_count = get_match(podium,bet)
 	if podium == bet:
 		return "RANK"
@@ -76,7 +91,7 @@ func get_status(result:Array,bet:Array):
 	elif match_count == 1:
 		return "PODIUM1"
 	else:
-		return "KAPUT"
+		return "-SORRY-"
 
 func get_match(podium:Array, bet:Array):
 	var match_count = 0
@@ -89,15 +104,46 @@ func get_results():
 	var final_table = []
 	for id in bets:
 		var bet = bets[id]
-		bet["status"] = get_status(result,bet["bet"])
+		bet["status"] = get_status(podium,bet["bet"])
 		bet["payout"] = payout[bet["status"]]
 		final_table.append(bet)
+	final_table.sort_custom(self, "id_sort")
 	return final_table
 
-func get_id():
+func id_sort(a,b):
+	if a["id"] < b["id"]:
+		return true
+	return false
+
+func get_id() -> String:
 	var max_id = 10
 	var id:PoolStringArray = []
 	for i in range(6):
 		var b = randi() % max_id
 		id.append(str(b))
 	return id.join("")
+
+func bet_entry_string(bet) -> String:
+	var string:PoolStringArray = []
+	string.append(pad(bet["id"],8))
+	string.append(pad(bet["name"],20))
+	string.append(bet["bet_string"])
+	return string.join(" ")
+
+func bet_result_string(bet) -> String:
+	var string:PoolStringArray = []
+	string.append(pad(bet["id"],8))
+	string.append(pad(bet["status"],12))
+	string.append(pad(str(bet["payout"]),6))
+	string.append(pad(bet["name"],18))
+	string.append(bet["bet_string"])
+	return string.join(" ")
+
+func pad(input:String,pad:int) -> String:
+	var string:PoolStringArray = []
+	input.strip_edges()
+	var diff = pad - input.length()
+	string.append(input)
+	for i in range(diff):
+		string.append(" ")
+	return string.join(" ")

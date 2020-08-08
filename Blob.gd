@@ -3,37 +3,32 @@ extends RigidBody2D
 export(int) var id = 1
 export(String) var label = "Diver"
 
-export(int, 80, 100, 4) var health_points:int = 8
+export(int, 80, 100, 4) var health_points:int = 180
 export(int, 30, 40) var linear_speed = 80
 export(int, 60, 90) var angular_speed = 90
 
 export var max_look_time = 1
 export var max_move_time = 3
 
-signal killed(victim, killer)
+signal dead(id)
 
-enum {LOOK, MOVE, ATTACK, DEAD}
-# FOLLOW
+enum {LOOK, MOVE}
 
 var enemyaround:bool = false
-var enemyinsight:bool = false
-var enemykilled:bool = false
-var enemyinrange:bool = false
-var wallinsight:bool = false
-var underattack:bool = false
+var enemyinsightL:bool = false
+var enemyinsightR:bool = false
+var wallinsightL:bool = false
+var wallinsightR:bool = false
 
-var objectinsight = null
 var time_looking:float = 0
 var time_moving:float = 0
-var target_angle:float = 0
-var time_damage:float = 0
 var dir:float = 1
 
-
-var state = LOOK
+var state = MOVE
 
 var rng = RandomNumberGenerator.new()
 func _ready():
+	print(id," ",label)
 	$Sprite.frame = id
 	$CanvasLayer/Label.text = label
 	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
@@ -45,8 +40,6 @@ func _process(delta):
 
 func _physics_process(delta):
 	state = get_next_step()
-	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
-	#$AnimationPlayer.stop()
 	match(state):
 		LOOK:
 			time_looking += delta
@@ -54,93 +47,93 @@ func _physics_process(delta):
 		MOVE:
 			time_moving += delta
 			linear_velocity = linear_speed * Vector2(cos(rotation), sin(rotation))
-		ATTACK:
-			$AnimationPlayer.play("attack")
-		DEAD:
-			pass
-	pass
+	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
 
 func get_stats():
 	var dict = {}
 	dict["id"] = id
 	dict["hp"] = health_points
 	dict["ac"] = state
-	dict["es"] = enemyinsight
-	dict["er"] = enemyinrange
-	dict["ws"] = wallinsight
-	dict["ta"] = round(target_angle)
+	dict["esl"] = enemyinsightL
+	dict["esr"] = enemyinsightR
+	dict["wsl"] = wallinsightL
+	dict["wsr"] = wallinsightR
 	dict["tm"] = round(time_moving)
 	dict["tl"] = round(time_looking)
 	return dict
 
 func get_next_step():
-	if state == DEAD:
-		return DEAD
 	cast_rays()
-	if enemyinrange:
-		return ATTACK
 	
-	elif enemyinsight:
-		target_angle = rad2deg(get_angle_to(objectinsight.position))
-		if abs(target_angle) < 5:
-			return MOVE
-		elif target_angle < 0:
-			dir = -1
-			return LOOK
-		else:
-			dir = 1
-			return LOOK
+	if enemyinsightL and enemyinsightR:
+		return MOVE
 	
-	if underattack:
-		dir = dir * rng.randf_range(1,2)
+	if enemyinsightL:
+		dir = -1
 		return LOOK
 	
-	elif time_looking > max_look_time:
+	if enemyinsightR:
+		dir = 1
+		return LOOK
+	
+	if time_looking > max_look_time:
 		time_looking = 0
 		time_moving = 0
 		return MOVE
 	
-	elif time_moving > max_move_time:
+	if time_moving > max_move_time:
 		dir = rng.randf_range(0.4,1) * [1,-1][rng.randi() % 2]
-		print(dir)
 		time_looking = 0
 		time_moving = 0
 		return LOOK
 	
-	elif wallinsight:
-		dir = dir * rng.randf_range(0.4,1)
+	if wallinsightL:
+		dir = +1 * rng.randf_range(0.4,1)
 		return LOOK
-		
-	elif state == ATTACK:
+	
+	if wallinsightR:
+		dir = -1 * rng.randf_range(0.4,1)
 		return LOOK
-		
-	else:
-		return state
 
+	if enemyaround:
+		return MOVE
+	
+	return state
+
+func hurt():
+	health_points -= 1
+	if health_points < 0:
+		emit_signal("dead",id)
+		queue_free()
+	if not $AnimationPlayer.is_playing():
+		$AnimationPlayer.play("hurt")
+
+func scale():
+	$RCenter.scale = $RCenter.scale * 1.3
+	$LCenter.scale = $LCenter.scale * 1.3
+	linear_speed = linear_speed * 1.1
 
 func cast_rays():
-	enemyinsight = false
-	wallinsight = false
-	objectinsight = null
-	underattack = false
-	
+	enemyinsightL = false
+	enemyinsightR = false
+	wallinsightL = false
+	wallinsightR = false
+	enemyaround = false
+		
 	if $Left.is_colliding():
 		var body = $Left.get_collider()
 		if body is StaticBody2D:
-			wallinsight = true
-			dir = 1 
+			wallinsightL = true
 			
 	elif $Right.is_colliding():
 		var body = $Right.get_collider()
 		if body is StaticBody2D:
-			wallinsight = true
-			dir = -1 
+			wallinsightR = true
 	
 	if $RCenter.is_colliding():
 		var body = $RCenter.get_collider()
 		if body is RigidBody2D:
-			enemyinsight = true
-			objectinsight = body
+			enemyinsightR = true
 		if body is StaticBody2D:
 			pass
 			#wallinsight = true
@@ -148,28 +141,18 @@ func cast_rays():
 	if $LCenter.is_colliding():
 		var body = $LCenter.get_collider()
 		if body is RigidBody2D:
-			enemyinsight = true
-			objectinsight = body
+			enemyinsightL = true
 		if body is StaticBody2D:
 			pass
-			#wallinsight = true
 			
 	var bodies = $Sense.get_overlapping_bodies()
 	for body in bodies:
 		if body != self:
-			if 0 > position.angle_to_point(body.position):
-				dir = 1
-			else:
-				dir = -1
-			underattack = true
+			enemyaround = true
 	
-
-func _on_Timer_timeout():
-	var areas = $HitBox.get_overlapping_areas()
-	for area in areas:
-		if area.name == "Weapon":
-			$AnimationPlayer.play("hurt")
-			health_points -= 1
-			if health_points <= 1:
-				queue_free()
-			break
+	var weponbodies = $Weapon.get_overlapping_bodies()
+	for body in weponbodies:
+		if body is RigidBody2D:
+			if body != self:
+				body.hurt()
+	

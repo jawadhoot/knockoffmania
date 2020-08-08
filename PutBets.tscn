@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://putbets.gd" type="Script" id=1]
 [ext_resource path="res://assets/bold_font16.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/button_font.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/bold_font24.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/bold_font12.tres" type="DynamicFont" id=5]
 
 [node name="Control" type="Control"]
+pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
@@ -15,32 +17,31 @@ __meta__ = {
 
 [node name="DriverList" type="ItemList" parent="."]
 margin_top = 88.0
-margin_right = 666.0
-margin_bottom = 525.0
+margin_right = 640.0
+margin_bottom = 533.0
 custom_fonts/font = ExtResource( 4 )
 max_columns = 2
 same_column_width = true
-fixed_column_width = 300
+fixed_column_width = 250
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SelectedList" type="Label" parent="."]
-margin_left = 28.0
-margin_top = 563.0
-margin_right = 640.0
-margin_bottom = 626.0
-custom_fonts/font = ExtResource( 4 )
+margin_top = 559.0
+margin_right = 699.0
+margin_bottom = 622.0
+custom_fonts/font = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="BetList" type="ItemList" parent="."]
-margin_left = 666.0
+margin_left = 640.0
 margin_top = 88.0
-margin_right = 1280.0
+margin_right = 1283.0
 margin_bottom = 635.0
-custom_fonts/font = ExtResource( 2 )
+custom_fonts/font = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -49,19 +50,19 @@ __meta__ = {
 anchor_right = 0.533
 anchor_bottom = 0.092
 margin_top = 635.0
-margin_right = -358.24
+margin_right = -359.24
 margin_bottom = 664.76
 custom_fonts/font = ExtResource( 2 )
-max_length = 20
+max_length = 16
 placeholder_text = "Name"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AddBet" type="Button" parent="."]
-margin_left = 324.0
+margin_left = 323.0
 margin_top = 635.0
-margin_right = 666.0
+margin_right = 640.0
 margin_bottom = 731.0
 custom_fonts/font = ExtResource( 3 )
 text = "Add Bet"
@@ -70,7 +71,7 @@ __meta__ = {
 }
 
 [node name="Begin" type="Button" parent="."]
-margin_left = 666.0
+margin_left = 640.0
 margin_top = 635.0
 margin_right = 1280.0
 margin_bottom = 731.0
@@ -81,7 +82,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_right = 536.0
+margin_right = 521.0
 margin_bottom = 88.0
 custom_fonts/font = ExtResource( 3 )
 text = "Car  List"
@@ -92,7 +93,7 @@ __meta__ = {
 }
 
 [node name="Label2" type="Label" parent="."]
-margin_left = 790.0
+margin_left = 775.0
 margin_right = 1280.0
 margin_bottom = 88.0
 custom_fonts/font = ExtResource( 3 )
@@ -104,8 +105,8 @@ __meta__ = {
 }
 
 [node name="Info" type="Button" parent="."]
-margin_left = 536.0
-margin_right = 790.0
+margin_left = 521.143
+margin_right = 775.143
 margin_bottom = 88.0
 custom_fonts/font = ExtResource( 3 )
 text = "INFO"
