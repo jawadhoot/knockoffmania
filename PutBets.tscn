@@ -51,7 +51,7 @@ anchor_right = 0.533
 anchor_bottom = 0.092
 margin_top = 635.0
 margin_right = -359.24
-margin_bottom = 664.76
+margin_bottom = 653.76
 custom_fonts/font = ExtResource( 2 )
 max_length = 16
 placeholder_text = "Name"
@@ -63,7 +63,7 @@ __meta__ = {
 margin_left = 323.0
 margin_top = 635.0
 margin_right = 640.0
-margin_bottom = 731.0
+margin_bottom = 720.0
 custom_fonts/font = ExtResource( 3 )
 text = "Add Bet"
 __meta__ = {
@@ -74,7 +74,7 @@ __meta__ = {
 margin_left = 640.0
 margin_top = 635.0
 margin_right = 1280.0
-margin_bottom = 731.0
+margin_bottom = 720.0
 custom_fonts/font = ExtResource( 3 )
 text = "Begin"
 __meta__ = {
@@ -105,8 +105,8 @@ __meta__ = {
 }
 
 [node name="Info" type="Button" parent="."]
-margin_left = 521.143
-margin_right = 775.143
+margin_left = 521.0
+margin_right = 775.0
 margin_bottom = 88.0
 custom_fonts/font = ExtResource( 3 )
 text = "INFO"
@@ -119,26 +119,6 @@ margin_left = 62.0
 margin_top = 136.0
 margin_right = 1228.0
 margin_bottom = 676.0
-dialog_text = "The Game:
-In KnockOffMania each car tries to eliminate other car by dashing in to one another as game progresses cars gets eliminated until 1 car remains.
-
-The Result:
-Podium is decided by last three cars remaining
-
-The Bets:
-You Place bets by selecting 3 drivers out of 20. who you think will be on the podium. if any of your selected driver gets on the podium you are a winner:
-
-The Payout:
-1 driver on the podium : 1
-2 drivers on the podium : 3
-All 3 drivers on the podium : 100
-All 3 drivers on the podium in the order selected: 500
-
-Driver List:
-Drivers in the Arena
-
-Placed Bets:
-Name of the punter (person placing bets, bet id, the placed bet (selected driver in the order) "
 [connection signal="item_selected" from="DriverList" to="." method="_on_DriverList_item_selected"]
 [connection signal="nothing_selected" from="DriverList" to="." method="_on_DriverList_nothing_selected"]
 [connection signal="pressed" from="AddBet" to="." method="_on_AddBet_pressed"]

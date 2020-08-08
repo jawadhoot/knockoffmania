@@ -21,11 +21,14 @@ var names = [
 var ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
 
 var payout = {
-	"RANK" : 500,
-	"PODIUM3" : 100,
-	"PODIUM2" : 3,
-	"PODIUM1" : 1,
-	"-SORRY-" : 0
+	"ALL_ON_PODIUM_IN_ORDER" : 100,
+	"ALL_ON_PODIUM" : 20,
+	"TOP_2_ON_SPOT" : 10,
+	"PICKED_TOP_2" : 5,
+	"2_ON_PODIUM" : 3,
+	"PICKED_THE_WINNER" : 2,
+	"1_ON_PODIUM" : 1,
+	"SORRY" : 0
 }
 
 var grid = []
@@ -81,17 +84,28 @@ func add_bet(name, bet, bet_string) -> String:
 	return ne_bet
 
 func get_status(podium:Array,bet:Array):
-	var match_count = get_match(podium,bet)
-	if podium == bet:
-		return "RANK"
-	elif match_count == 3:
-		return "PODIUM3"
-	elif match_count == 2:
-		return "PODIUM2"
-	elif match_count == 1:
-		return "PODIUM1"
+	var match_count3 = get_match(podium,bet)
+	var match_count2 = get_match(podium.slice(0,2),bet)
+	var match_count1 = get_match(podium.slice(0,1),bet)
+	if match_count3 == 3:
+		if podium == bet:
+			return "ALL_ON_PODIUM_IN_ORDER"
+		else:
+			return "ALL_ON_PODIUM"
+	elif match_count3 == 2:
+		if podium.slice(0,2) == bet.slice(0,2):
+			return "TOP_2_ON_SPOT"
+		elif match_count2 == 2:
+			return "PICKED_TOP_2"
+		else:
+			return "2_ON_PODIUM"
+	elif match_count3 == 1:
+		if match_count1 == 1:
+			return "PICKED_THE_WINNER"
+		else:
+			return "1_ON_PODIUM"
 	else:
-		return "-SORRY-"
+		return "SORRY"
 
 func get_match(podium:Array, bet:Array):
 	var match_count = 0
@@ -134,7 +148,7 @@ func bet_result_string(bet) -> String:
 	var string:PoolStringArray = []
 	string.append(pad(bet["id"],8))
 	string.append(pad(bet["status"],12))
-	string.append(pad(str(bet["payout"]),6))
+	string.append(pad(str(bet["payout"]),30))
 	string.append(pad(bet["name"],18))
 	string.append(bet["bet_string"])
 	return string.join(" ")
