@@ -43,7 +43,7 @@ __SORRY__ pays __0__:
 
   None of the car in the bet are on podium, eg : your bet is (D,E,F) and podium is (A,B,C)
 
-## Simulate Probablities
+## Simulate Probabilities
 
 | Name                   | Percent |
 |------------------------|---------|
