@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/elementWood012.png-33caa9146c1e352bd2e3342211300c1c.stex"
+path="res://.import/barrel_blue_down.png-d994b288f769c52ba8bc92714a3d1cf9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/elementWood012.png"
-dest_files=[ "res://.import/elementWood012.png-33caa9146c1e352bd2e3342211300c1c.stex" ]
+source_file="res://assets/barrel_blue_down.png"
+dest_files=[ "res://.import/barrel_blue_down.png-d994b288f769c52ba8bc92714a3d1cf9.stex" ]
 
 [params]
 
