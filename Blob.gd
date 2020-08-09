@@ -31,7 +31,7 @@ func _ready():
 	print(id," ",label)
 	$Sprite.frame = id
 	$CanvasLayer/Label.text = label
-	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
+	$CanvasLayer/Label.set_position(position + Vector2(-20,-40))
 	rng.randomize()
 	pass
 
@@ -47,7 +47,7 @@ func _physics_process(delta):
 		MOVE:
 			time_moving += delta
 			linear_velocity = linear_speed * Vector2(cos(rotation), sin(rotation))
-	$CanvasLayer/Label.set_position(position + Vector2(0,-40))
+	$CanvasLayer/Label.set_position(position + Vector2(-20,-40))
 
 func get_stats():
 	var dict = {}
