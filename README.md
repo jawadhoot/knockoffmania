@@ -45,14 +45,13 @@ __SORRY__ pays __0__:
 
 ## Simulate Probabilities
 
-| Name                   | Percent |
-|------------------------|---------|
-| ALL_ON_PODIUM_IN_ORDER | 0.02    |
-| ALL_ON_PODIUM          | 0.07    |
-| TOP_2_ON_SPOT          | 0.25    |
-| PICKED_TOP_2           | 1.24    |
-| 2_ON_PODIUM            | 2.99    |
-| PICKED_THE_WINNER      | 11.92   |
-| 1_ON_PODIUM            | 23.86   |
-| SORRY                  | 59.65   |
-| payout                 | 68.25   |
+| Name                   | percent | payout_percent |
+|------------------------|---------|----------------|
+| ALL_ON_PODIUM_IN_ORDER | 0.02    | 1.9            |
+| ALL_ON_PODIUM          | 0.07    | 1.42           |
+| TOP_2_ON_SPOT          | 0.25    | 2.5            |
+| PICKED_TOP_2           | 1.24    | 6.21           |
+| 2_ON_PODIUM            | 2.99    | 8.96           |
+| PICKED_THE_WINNER      | 11.92   | 23.85          |
+| 1_ON_PODIUM            | 23.86   | 23.86          |
+| SORRY                  | 59.65   | 0              |
